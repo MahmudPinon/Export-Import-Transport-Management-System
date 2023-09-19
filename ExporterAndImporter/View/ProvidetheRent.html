@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script>  
+			window.onload = function() {
+        document.body.style.backgroundImage = "url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBw0NDQ0HBw0HBwcNBw0HBwcHBw8IDQcNFREWFhURExMYHSggGBolGxMVITEhJSkrLi4uFx8zODMsNygtLisBCgoKDQ0NDw8PDysZFRkrKzctLSsrLS0rNzcrKy03LTc3KzctNzc3LTc3LTctLS03LSsrLTctLS03LS0tLTctLf/AABEIALYBFQMBIgACEQEDEQH/xAAWAAEBAQAAAAAAAAAAAAAAAAAAAQb/xAAVEAEBAAAAAAAAAAAAAAAAAAAAAf/EABcBAQEBAQAAAAAAAAAAAAAAAAABBQT/xAAVEQEBAAAAAAAAAAAAAAAAAAAAAf/aAAwDAQACEQMRAD8A2ADuYwAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAoAAAAAAAAAAAAAIACgAAAAAAAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAKICgAgAAAACggAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACoAAAAgAAAKAAAAAAAAAAAAAAAAAAAAAAAACoIKgKAKCAAAAAACoAAAAgAKAAAAAAAAgAKAAAAAAAIACgqAAACoAAAACAAoCoIAoAAAAAAAAAAAAAAAIAAAqKCoAAAAAACAAoAAqAAAAAAAAAAAAAAAACAAoAAACAqCgAgAKACAAAAAAAAAAoAAAAAAAAAAAAAAAIAAAAABAAAAQLQUoAgAAACgAoAAAAAgAKAAgAIAAAKj/9k=')";
+    }
+		function validateform(){  
+           
+                  var prdctid=document.getElementById("prdctid").value;
+                  var regnum=document.getElementById("regnum").value;
+                  var pd=document.getElementById("pd").value;
+                  var cd = document.getElementById("cd").value;
+
+                  var pdDateObj = new Date(pd);
+                  var cdDateObj = new Date(cd);
+                  var today = new Date();
+ 
+
+                  if (prdctid.trim() == "") {
+                  alert("Please enter The Product Id");
+                  return false;
+                  }
+                  if (regnum==null || regnum==""){  
+		            alert("Please enter The Transport Registration Number");  
+		            return false;  
+		              }
+                  if (pd == null || pd == '') {
+                   alert('Pick Up Date is empty');
+                   return false;
+                  }
+                if (cd == null || cd == '') {
+                 alert('Clearence Date is empty');
+                 return false;
+                }    
+                if (pd != '') {
+                       if (pdDateObj.getTime()<today.getTime()) {
+                       alert("Pick Up Date can not be a previous date from today");
+                      return false;
+                      }
+                  }
+                if (cdDateObj.getTime() <today.getTime()) {
+                    alert("Clearance Date can not be a previous date from today");
+                    return false;
+                  }
+
+                var diffInMilliseconds1 = pdDateObj.getTime() - today.getTime();
+                var diffInDays1 = Math.round(diffInMilliseconds1 / (24 * 60 * 60 * 1000));
+
+                var diffInMilliseconds2 = cdDateObj.getTime() - today.getTime();
+                var diffInDays2 = Math.round(diffInMilliseconds2 / (24 * 60 * 60 * 1000));
+
+                if(diffInDays1>1)
+                {
+                    alert("PickUp Date can not be a More than One day from the Current Date");
+                    return false;
+                }
+                if((diffInDays2diffInDays1)>3)
+                {
+                    alert("PickUp Date can not be a More than Three day from the PickUp Date");
+                    return false;
+                }
+        
+               if(pd != '' && cd == '' && regnum!="" && prdctid!="")
+               {
+                     res=helpvalidateform(pd,cd,regnum,prdctid);
+               }
+ 
+}
+
+function helpvalidateform(regnum,prdctid)
+{
+    var xhttp = new XMLHttpRequest();
+    var result = false;
+               
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            if(this.responseText == "not belongs"){
+                alert("This Product Does Not Belongs to You."); 
+            }
+            else if(this.responseText == "not requested"){
+                alert("This Vehicle Does not Requested for any Product."); 
+            }
+            else if(this.responseText == "not exists product"){
+                alert("This Product Does Not Exists."); 
+            }
+            else if(this.responseText == "not requested for this product"){
+                alert("This Vehicle Does not Requested for this Product."); 
+            }
+            else if(this.responseText == "booked"){
+                alert("This Product is Already Booked."); 
+            }
+            else {
+                result = true;
+            }
+        }
+    };
+    xhttp.open("POST", "../Controller/ProvideRentChecking.php", false);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("regnum=" + regnum+"&prdctid=" + prdctid);
+    return result;
+}
+
+function checkPrdId(){
+           if (document.getElementById("prdctid").value == "") {
+              document.getElementById("nameErr").innerHTML = "ProductId can't be blank";
+              document.getElementById("prdctid").style.borderColor = "red";
+           }else{
+              document.getElementById("nameErr").innerHTML = "";
+              document.getElementById("prdctid").style.borderColor = "black";
+           }
+        }
+function checkReg(){
+           if (document.getElementById("regnum").value == "") {
+              document.getElementById("EmailErr").innerHTML = "Transport Registration Number can't be blank";
+              document.getElementById("regnum").style.borderColor = "red";
+           }else{
+              document.getElementById("EmailErr").innerHTML = "";
+              document.getElementById("regnum").style.borderColor = "black";
+           }
+        }
+function checkpD(){
+        if (document.getElementById("dob").value == "") {
+            document.getElementById("pdErr").innerHTML = "Product Pick UP Date Can not be Blank";
+            document.getElementById("dob").style.borderColor = "red";
+        }else{
+              document.getElementById("pdErr").innerHTML = "";
+              document.getElementById("dob").style.borderColor = "black";
+        }
+        }
+function checkCD(){
+        if (document.getElementById("dob").value == "") {
+            document.getElementById("DobErr").innerHTML = "Product Clearence Date Can not be Blank";
+            document.getElementById("dob").style.borderColor = "red";
+        }else{
+              document.getElementById("DobErr").innerHTML = "";
+              document.getElementById("dob").style.borderColor = "black";
+        }
+        }
+   
+	
+</script>  
+</head>
+<title>Provide the Rent</title> 
+<link rel="stylesheet" href="../../Transport Owner/Style/TrnasportOwnerReg.css">
+</head>
+<body>
+<br />
+<div>  
+	<fieldset >
+	  <legend><b>Registration</legend>                
+	  <center><form  method="post" action="../Controller/ExporterImporterProvideRentController.php" onsubmit="return validateform()" > 
+            Product Id: <input type="text" name="prdctid" id="prdctid" placeholder="Enter Product Id" onblur="checkPrdId()" onkeyup="checkPrdId()">
+            <p id="nameErr"></p> 
+            Transport Registration Number: <input type="text" id="regnum" name="regnum" placeholder="Enter Registration Number" onblur="checkReg()">
+            <p id="EmailErr"></p> 
+            PickUp Date: <input type="date" id="pd" name="pd" onblur="checkpD()">
+            <p id="pdErr"></p> 
+            Clearence Date: <input type="date" id="cd" name="cd" onblur="checkCD()">
+            <p id="DobErr"></p>
+<input type="submit" name="submit" value="Change"></br> 
+</form>  </center>
+</body>
+</html>

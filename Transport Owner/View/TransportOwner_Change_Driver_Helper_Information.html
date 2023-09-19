@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script>  
+			window.onload = function() {
+        document.body.style.backgroundImage = "url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBw0NDQ0HBw0HBwcNBw0HBwcHBw8IDQcNFREWFhURExMYHSggGBolGxMVITEhJSkrLi4uFx8zODMsNygtLisBCgoKDQ0NDw8PDysZFRkrKzctLSsrLS0rNzcrKy03LTc3KzctNzc3LTc3LTctLS03LSsrLTctLS03LS0tLTctLf/AABEIALYBFQMBIgACEQEDEQH/xAAWAAEBAQAAAAAAAAAAAAAAAAAAAQb/xAAVEAEBAAAAAAAAAAAAAAAAAAAAAf/EABcBAQEBAQAAAAAAAAAAAAAAAAABBQT/xAAVEQEBAAAAAAAAAAAAAAAAAAAAAf/aAAwDAQACEQMRAD8A2ADuYwAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAoAAAAAAAAAAAAAIACgAAAAAAAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAKICgAgAAAACggAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACoAAAAgAAAKAAAAAAAAAAAAAAAAAAAAAAAACoIKgKAKCAAAAAACoAAAAgAKAAAAAAAAgAKAAAAAAAIACgqAAACoAAAACAAoCoIAoAAAAAAAAAAAAAAAIAAAqKCoAAAAAACAAoAAqAAAAAAAAAAAAAAAACAAoAAACAqCgAgAKACAAAAAAAAAAoAAAAAAAAAAAAAAAIAAAAABAAAAQLQUoAgAAACgAoAAAAAgAKAAgAIAAAKj/9k=')";
+        
+    }
+		function validateform(){  
+           
+                  var transportregnumber=document.getElementById("transportregnumber").value;
+                  var dname = document.getElementById("dname").value;
+                  var hname=document.getElementById("hname").value;
+                  var license=document.getElementById("license").value;
+                  var ddob = document.getElementById("ddob").value;
+                  var hdob=document.getElementById("hdob").value;
+                  var dphnnumber=document.getElementById("dphnnumber").value;
+                  
+                  if (transportregnumber.trim() == "") {
+                  alert("Please enter the Transport Registration Number");
+                  return false;
+                  }
+                  if (dname==null || dname==""){  
+		            alert("Please Fill the Driver Name");  
+		            return false;  
+		          }
+                  if (hname.trim() == "") {
+                  alert("Please Fill the Helper Name");
+                  return false;
+                  }
+               if (license == null || license == '') {
+                 alert('Please Fill the License Number');
+                 return false;
+                }
+                if (ddob == null || ddob == '') {
+                 alert('Driver Date of Birth is Empty');
+                 return false;
+                }
+                if (hdob == null || hdob == '') {
+                 alert('Helper Date of Birth is Empty');
+                 return false;
+                }
+                if(dphnnumber == null || dphnnumber == '')
+                {
+                    alert("Driver Phone Number is Empty");  
+		            return false;
+                }
+                if (license.length != 12) {
+                 alert('Driver License Number Length Must be 12');
+                 return false;
+                }
+                if (dphnnumber.length != 11) {
+                 alert('Driver Phone Number Must be 11 Digit Long');
+                 return false;
+                }
+                if(dname.trim() != "")
+                 {
+                  const regex = /^[a-zA-Z\s]*$/;
+                  if(!regex.test(dname.trim()))
+                   {
+                 alert("Invalid Driver Name");  
+                 return false; 
+                   }
+                 }
+                 if(hname.trim() != "")
+                 {
+                  const regex = /^[a-zA-Z\s]*$/;
+                  if(!regex.test(hname.trim()))
+                   {
+                 alert("Invalid Helper name");  
+                 return false; 
+                   }
+                 }
+                if (ddob != null || ddob != '')
+                {
+                  const dateFormat = /^(\d{4})-(\d{2})-(\d{2})$/;
+                  if (!ddob.match(dateFormat)) {
+                  return false;
+                  }
+  
+                  const year = parseInt(RegExp.$1);
+                  const month = parseInt(RegExp.$2);
+                  const day = parseInt(RegExp.$3);
+                  const dobDate = new Date(year, month - 1, day);
+                  const ageInMs = Date.now() - dobDate.getTime();
+                  const ageInYears = ageInMs / (1000 * 60 * 60 * 24 * 365.25);  
+                  if (ageInYears < 21 || ageInYears > 58) {
+                  alert("Driver Age is not in the Range"); 
+                  return false;
+                  }
+                }
+                if (hdob != null || hdob != '')
+                {
+                  const dateFormat = /^(\d{4})-(\d{2})-(\d{2})$/;
+                  if (!hdob.match(dateFormat)) {
+                  return false;
+                  }
+  
+                  const year = parseInt(RegExp.$1);
+                  const month = parseInt(RegExp.$2);
+                  const day = parseInt(RegExp.$3);
+                  const dobDate = new Date(year, month - 1, day);
+                  const ageInMs = Date.now() - dobDate.getTime();
+                  const ageInYears = ageInMs / (1000 * 60 * 60 * 24 * 365.25);  
+                  if (ageInYears < 21 || ageInYears > 58) {
+                  alert("Helper Age is not in the Range"); 
+                  return false;
+                  }
+                }
+                if(transportregnumber != "")
+                {
+                    var res2=helpvalidateform3(transportregnumber);
+                    if(res2==false)
+                    {
+                        return false;
+                    }
+                }
+                if (transportregnumber != "" && license != "" && dphnnumber != ""&& dname != "") {
+                var res=helpvalidateform(transportregnumber,license,dphnnumber,dname);
+                var res1=helpvalidateform2(transportregnumber,license,dphnnumber,dname);
+                   if(res==true)
+                   {
+                    if(res1==false)
+                    {
+                        return false;
+                    }
+                    else if(res1==true)
+                    {
+                        return true;
+                    }
+                   }
+                    else if(res==false)
+                   {
+                      //alert("false");
+                      return false;
+                   } 
+                }
+
+
+}
+
+
+function helpvalidateform3(transportregnumber)
+{
+    var xhttp = new XMLHttpRequest();
+    var result = false;
+               
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            if (this.responseText == "transportregnumber not exists") {
+                alert("This Vehicle is not Registered in the System.");
+            }
+            if (this.responseText == "not Owner") {
+                alert("You Are not the Owner of that Vehicle.");
+            }
+            else {
+                result = true;
+            }
+        }
+    };
+    xhttp.open("POST", "../Controller/CheckDuplicationforDriverHelperChange3.php", false);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("transportregnumber=" + transportregnumber);
+    return result;
+}
+function helpvalidateform(transportregnumber,license,dphnnumber,dname)
+{
+ 
+    var xhttp = new XMLHttpRequest();
+    var result = false;
+               
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            if (this.responseText == "license exists") {
+                alert("License Number already exists.Two Driver Can not carry the Same License Number.");
+            }
+            else if(this.responseText == "Phone exists"){
+                alert("Driver Phone Number already exists. Two Driver Can not Carry the Same Phone Number.");
+            }
+            else {
+                result = true;
+            }
+        }
+    };
+    xhttp.open("POST", "../Controller/CheckDuplicationforDriverHelperChange.php", false);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("transportregnumber=" + transportregnumber+"&license=" + license+"&dphnnumber=" + dphnnumber+"&dname=" + dname);
+    return result;
+}
+
+
+function helpvalidateform2(transportregnumber,license,dphnnumber,dname)
+{
+ 
+    var xhttp = new XMLHttpRequest();
+    var result = false;
+               
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            //alert(this.responseText);
+            if(this.responseText =="Drive Change but License Not"){
+                alert("You Have Change the Driver Name. Two Driver Can not Carry the Same Phone Number.");
+            }
+            else if(this.responseText =="Drive Change but Phone Not"){
+                alert("You Have Change the Driver Name.Two Driver Can not Carry the Same Phone Number.");
+            }
+            else if(this.responseText =="Drive Change but License and Phone Not"){
+                alert("You Have Change the Driver Name.Two Driver Can not Carry the Same Phone Number and License Number.");
+            }
+            else {
+                result = true;
+            }
+        }
+    };
+    xhttp.open("POST", "../Controller/CheckDuplicationforDriverHelperChange2.php", false);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("transportregnumber=" + transportregnumber+"&license=" + license+"&dphnnumber=" + dphnnumber+"&dname=" + dname);
+    return result;
+}
+
+
+
+
+
+
+function checkRegNum() {
+			if (document.getElementById("transportregnumber").value == "") {
+			  	document.getElementById("TregnumErr").innerHTML = "Transport Registration Number Can not be Blank";
+			  	document.getElementById("transportregnumber").style.borderColor = "red";
+			}else{
+			  	document.getElementById("TregnumErr").innerHTML = "";
+			  	document.getElementById("transportregnumber").style.borderColor = "black";
+
+			}
+			
+        }
+
+function checkDName(){
+           if (document.getElementById("dname").value == "") {
+              document.getElementById("DnameErr").innerHTML = "Driver Name Can not be Blank";
+              document.getElementById("dname").style.borderColor = "red";
+           }else{
+              document.getElementById("DnameErr").innerHTML = "";
+              document.getElementById("dname").style.borderColor = "black";
+           }
+        }
+	function checkHName(){
+        if (document.getElementById("hname").value == "") {
+            document.getElementById("HnameErr").innerHTML = "Helper Name Can not be Blank";
+            document.getElementById("hname").style.borderColor = "red";
+        }else{
+            document.getElementById("HnameErr").innerHTML = "";
+            document.getElementById("hname").style.borderColor = "black";
+        }
+        } 
+        function checkLNumber(){
+        if (document.getElementById("license").value == "") {
+            document.getElementById("DLicenseErr").innerHTML = "Driver License Number Can not be Blank";
+            document.getElementById("license").style.borderColor = "red";
+        }else{
+              document.getElementById("DLicenseErr").innerHTML = "";
+              document.getElementById("license").style.borderColor = "black";
+        }
+        }
+        function checDDob(){
+        if (document.getElementById("ddob").value == "") {
+            document.getElementById("DAgeErr").innerHTML = "Driver Age Can not be Blank";
+            document.getElementById("ddob").style.borderColor = "red";
+        }else{
+            document.getElementById("DAgeErr").innerHTML = "";
+            document.getElementById("ddob").style.borderColor = "black";
+        }
+        }
+        function checHDob(){
+        if (document.getElementById("hdob").value == "") {
+            document.getElementById("HAgeErr").innerHTML = "Helper Age Can not be Blank";
+            document.getElementById("hdob").style.borderColor = "red";
+        }else{
+            document.getElementById("HAgeErr").innerHTML = "";
+            document.getElementById("hdob").style.borderColor = "black";
+        }
+        }
+        function checkDPhoneNumber(){
+        if (document.getElementById("dphnnumber").value == "") {
+            document.getElementById("DPhoneNumberErr").innerHTML = "Driver Phone Number Can not be Blank";
+            document.getElementById("dphnnumber").style.borderColor = "red";
+        }else{
+            document.getElementById("DPhoneNumberErr").innerHTML = "";
+            document.getElementById("dphnnumber").style.borderColor = "black";
+        }
+        }
+   
+	
+</script>  
+</head>
+<title>Registration form</title> 
+<link rel="stylesheet" href="../Style/TrnasportOwnerDriverHelperVehicelReg.css">
+</head>
+<body>
+<br />
+<div>  
+	<fieldset >
+	  <legend><b>Change Driver and Helper Information</legend>                
+	  <center><form  method="post" action="../Controller/RegisteredVehileFillInformationChange.php" onsubmit="return validateform()" > 
+            Transport Registration Number: <input type="text" name="transportregnumber" id="transportregnumber" placeholder="Enter Registration Number" onblur="checkRegNum()" onkeyup="checkRegNum()">
+            <p id="TregnumErr"></p> 
+            Driver Name: <input type="text" name="dname" id="dname" placeholder="Driver Name" onblur="checkDName()" onkeyup="checkDName()">
+            <p id="DnameErr"></p> 
+            Helper Name: <input type="text" name="hname" id="hname" placeholder="Helper Name" onblur="checkHName()" onkeyup="checkHName()">
+            <p id="HnameErr"></p> 
+            Driver License Number: <input type="text" id="license" name="license" placeholder="Driver License Number" onblur="checkLNumber()">
+            <p id="DLicenseErr"></p>
+            Driver Age: <input type="date" id="ddob" name="ddob" onblur="checDDob()">
+            <p id="DAgeErr"></p>
+            Helper Age: <input type="date" id="hdob" name="hdob" onblur="checHDob()">
+            <p id="HAgeErr"></p>
+            Driver Phone Number: <input type="number" id="dphnnumber" name="dphnnumber" placeholder="Enter Driver Phone Number" onblur="checkDPhoneNumber()">
+            <p id="DPhoneNumberErr"></p> 
+            
+<input type="submit" name="submit" value="Change"></br>
+      </br>
+    <div style="text-align:center;">
+        <a href="../View/TranspoertWonerWorkstart.php" style="display:inline-block; padding:10px 20px; border:1px solid blue; color:wheat; text-decoration:none; border-radius: 10px;background-color:lightseagreen;">Home</a>
+    </div>
+    
+        
+</form>  </center>
+</body>
+</html>

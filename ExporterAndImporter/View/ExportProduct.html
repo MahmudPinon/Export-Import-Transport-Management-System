@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script>  
+			window.onload = function() {
+        document.body.style.backgroundImage = "url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBw0NDQ0HBw0HBwcNBw0HBwcHBw8IDQcNFREWFhURExMYHSggGBolGxMVITEhJSkrLi4uFx8zODMsNygtLisBCgoKDQ0NDw8PDysZFRkrKzctLSsrLS0rNzcrKy03LTc3KzctNzc3LTc3LTctLS03LSsrLTctLS03LS0tLTctLf/AABEIALYBFQMBIgACEQEDEQH/xAAWAAEBAQAAAAAAAAAAAAAAAAAAAQb/xAAVEAEBAAAAAAAAAAAAAAAAAAAAAf/EABcBAQEBAQAAAAAAAAAAAAAAAAABBQT/xAAVEQEBAAAAAAAAAAAAAAAAAAAAAf/aAAwDAQACEQMRAD8A2ADuYwAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAoAAAAAAAAAAAAAIACgAAAAAAAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAKICgAgAAAACggAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACoAAAAgAAAKAAAAAAAAAAAAAAAAAAAAAAAACoIKgKAKCAAAAAACoAAAAgAKAAAAAAAAgAKAAAAAAAIACgqAAACoAAAACAAoCoIAoAAAAAAAAAAAAAAAIAAAqKCoAAAAAACAAoAAqAAAAAAAAAAAAAAAACAAoAAACAqCgAgAKACAAAAAAAAAAoAAAAAAAAAAAAAAAIAAAAABAAAAQLQUoAgAAACgAoAAAAAgAKAAgAIAAAKj/9k=')";
+        populateTerminalNameSelect();
+        populateProductTypeSelect();
+        populateExportedToSelect();
+    }
+		function validateform(){  
+           
+                  var name=document.getElementById("name").value;
+                  var weight = document.getElementById("weight").value;
+                  var prdctprice=document.getElementById("prdctprice").value;
+                  var prpickupplace=document.getElementById("prpickupplace").value;
+                  var rent = document.getElementById("rent").value;
+                  var select1 = document.getElementById("terminalNameSelect");
+                  var selectedOption1 = select1.options[select1.selectedIndex].value;
+
+                  var select2 = document.getElementById("exportedto");
+                  var selectedOption2 = select2.options[select2.selectedIndex].value;
+
+                  var select3 = document.getElementById("producttypeselect");
+                  var selectedOption3 = select3.options[select3.selectedIndex].value;
+                  if (name.trim() == "") {
+                  alert("Please Enter The Product Name");
+                  return false;
+                  }
+                  if (weight==null || weight==""){  
+		            alert("Product Weight can't be blank");  
+		            return false;  
+		          }
+                  if (prdctprice.trim() == "") {
+                  alert("Please enter Product Price");
+                  return false;
+                  }
+               if (prpickupplace == null || prpickupplace == '') {
+                 alert("Product Pick Up can't be blank");
+                 return false;
+                }
+                if (rent == null || rent == '') {
+                 alert("Rent can't be blank");
+                 return false;
+                }
+                if (rent != null || rent != '') {
+                    if (rent <5000 || rent>8000) {
+                    alert("Rent Must Be BetWeen (5000-8000)");
+                    return false;
+                }
+                }
+                if (prdctprice != null || prdctprice != '') {
+                    if (prdctprice <100) {
+                    alert("Product Price Can not be less than 100 dollar");
+                    return false;
+                }
+                }
+                if (weight != null || weight != '') {
+                    if (weight <0.5 || weight>10) {
+                    alert("Product Weight Must Be BetWeen (0.5-10)Tons");
+                    return false;
+                }
+                }
+                if (selectedOption1 === "") {
+                  alert("Select A Terminal(If it is not showing any terminal than No Terminal Avlaible at This Moment)"); 
+                  return false;
+                }
+                if (selectedOption1 != "") {
+                    var res=populateTerminalNameSelect(); 
+                    if(res===false)
+                    {
+                        return false;
+                    }
+                    
+                }
+
+                if (selectedOption2 === "") {
+                  alert("Select A Country Where Your Product is Going to Export"); 
+                  return false;
+                }
+                if (selectedOption2 != "") {
+                    var res=populateExportedToSelect(); 
+                    if(res===false)
+                    {
+                        return false;
+                    }
+                    
+                }
+
+
+                if (selectedOption3 === "") {
+                  alert("Select A Product Type"); 
+                  return false;
+                }
+                if (selectedOption3 != "") {
+                    var res=populateProductTypeSelect(); 
+                    if(res===false)
+                    {
+                        return false;
+                    }
+                    
+                }
+                
+
+
+}
+function populateTerminalNameSelect() {
+  var select = document.getElementById("terminalNameSelect");
+  var xhr = new XMLHttpRequest();
+  var result = true;
+  xhr.open("GET", "../Controller/ExporterImporterTerminalSelectController.php");
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      var options = JSON.parse(xhr.responseText);
+      if (options.length === 0) {
+        var option = document.createElement("option");
+        option.text = "No terminals available";
+        select.add(option);
+        result = false;
+      } else {
+        for (var i = 0; i < options.length; i++) {
+          var option = document.createElement("option");
+          option.text = options[i].TerminalName;
+          select.add(option);
+        }
+      }
+    } else {
+      console.log("Error: " + xhr.statusText);
+    }
+  };
+  xhr.send();
+  return result;
+}
+function populateProductTypeSelect() {
+  var select = document.getElementById("producttypeselect");
+  var xhr = new XMLHttpRequest();
+  var result = true;
+  xhr.open("GET", "../Controller/ExporterImporterProductSelectController.php");
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      var options = JSON.parse(xhr.responseText);
+      if (options.length === 0) {
+        var option = document.createElement("option");
+        option.text = "No Products available";
+        select.add(option);
+        result = false;
+      } else {
+        for (var i = 0; i < options.length; i++) {
+          var option = document.createElement("option");
+          option.text = options[i].ProductNames;
+          select.add(option);
+        }
+      }
+    } else {
+      console.log("Error: " + xhr.statusText);
+    }
+  };
+  xhr.send();
+  return result;
+}
+function populateExportedToSelect() {
+  var select = document.getElementById("exportedto");
+  var xhr = new XMLHttpRequest();
+  var result = true;
+  xhr.open("GET", "../Controller/ExporterImporterExportedToSelectController.php");
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      var options = JSON.parse(xhr.responseText);
+      if (options.length === 0) {
+        var option = document.createElement("option");
+        option.text = "No Country/Region available";
+        select.add(option);
+        result = false;
+      } else {
+        for (var i = 0; i < options.length; i++) {
+          var option = document.createElement("option");
+          option.text = options[i].CountryName;
+          select.add(option);
+        }
+      }
+    } else {
+      console.log("Error: " + xhr.statusText);
+    }
+  };
+  xhr.send();
+  return result;
+}
+function checkPrName() {
+			if (document.getElementById("name").value == "") {
+			  	document.getElementById("nameErr").innerHTML = "Name can't be blank";
+			  	document.getElementById("name").style.borderColor = "red";
+			}else{
+			  	document.getElementById("nameErr").innerHTML = "";
+			  	document.getElementById("name").style.borderColor = "black";
+
+			}
+			
+        }
+
+function checkPrWeight(){
+           if (document.getElementById("email").value == "") {
+              document.getElementById("EmailErr").innerHTML = "Email can't be blank";
+              document.getElementById("email").style.borderColor = "red";
+           }else{
+              document.getElementById("EmailErr").innerHTML = "";
+              document.getElementById("email").style.borderColor = "black";
+           }
+        }
+	function checkProductTypeSel(){
+        if (document.getElementById("username").value == "") {
+            document.getElementById("UsernErr").innerHTML = "Username can't be blank";
+            document.getElementById("username").style.borderColor = "red";
+        }else{
+            document.getElementById("unameErr").innerHTML = "";
+            document.getElementById("UsernErr").style.borderColor = "black";
+        }
+        } 
+        function checkProductExportedTo(){
+        if (document.getElementById("dob").value == "") {
+            document.getElementById("DobErr").innerHTML = "Date of Birth can't be blank";
+            document.getElementById("dob").style.borderColor = "red";
+        }else{
+              document.getElementById("DobErr").innerHTML = "";
+              document.getElementById("dob").style.borderColor = "black";
+        }
+        }
+        function checkTerminalName(){
+           var select = document.getElementById("terminalName");
+           var error = document.getElementById("TNameErr");
+           if (select.value === "") {
+           error.innerHTML = "Please select a terminal name.";
+           select.style.borderColor = "red";
+           return false;
+           }
+           error.innerHTML = "";
+           select.style.borderColor = "black";
+           return true;
+        }
+        function checkProductTypeSel()
+        {
+           var select = document.getElementById("producttypeselect");
+           var error = document.getElementById("PrTypeErr");
+           if (select.value === "") {
+           error.innerHTML = "Please select a Product Type.";
+           select.style.borderColor = "red";
+           return false;
+           }
+           error.innerHTML = "";
+           select.style.borderColor = "black";
+           return true;
+        }
+        function checkProductExportedTo()
+        {
+           var select = document.getElementById("exportedto");
+           var error = document.getElementById("ExpToErr");
+           if (select.value === "") {
+           error.innerHTML = "Please select a Exported Destination.";
+           select.style.borderColor = "red";
+           return false;
+           }
+           error.innerHTML = "";
+           select.style.borderColor = "black";
+           return true;
+        }
+        function checkPrPrice(){
+        if (document.getElementById("prdctprice").value == "") {
+            document.getElementById("PrPriceErr").innerHTML = "Bin Number can't be blank";
+            document.getElementById("prdctprice").style.borderColor = "red";
+        }else{
+            document.getElementById("PrPriceErr").innerHTML = "";
+            document.getElementById("prdctprice").style.borderColor = "black";
+        }
+        }
+        function checkPickPlace(){
+        if (document.getElementById("prpickupplace").value == "") {
+            document.getElementById("PrPickupErr").innerHTML = "Password and Confirm Password can't be blank";
+            document.getElementById("prpickupplace").style.borderColor = "red";
+        }else{
+            document.getElementById("PrPickupErr").innerHTML = "";
+            document.getElementById("prpickupplace").style.borderColor = "black";
+        }
+        }
+        function checkRent(){
+           if (document.getElementById("rent").value == "") {
+		   document.getElementById("RentErr").innerHTML = "Password can't be blank";
+		   document.getElementById("rent").style.borderColor = "red";
+	     }else{
+		   document.getElementById("RentErr").innerHTML = "";
+		   document.getElementById("rent").style.borderColor = "black";
+			}
+        }    
+	
+</script>  
+</head>
+<title>Registration form</title> 
+<link rel="stylesheet" href="../Style/ExporterImporterExportProduct.css">
+
+</head>
+<body>
+<br />
+<div>  
+	<fieldset >
+	  <legend><b>Export Product Register</legend>                
+	  <center><form  method="post" action="../Controller/CreateRegisterProductExport.php" onsubmit="return validateform()" > 
+            Product Name: <input type="text" name="name" id="name" placeholder="Enter Name" onblur="checkPrName()" onkeyup="checkPrName()">
+            <p id="prnameErr"></p> 
+            Product Weight: <input type="number" id="weight" name="weight" placeholder="Enter Product Weight(Tons)" onblur="checkPrWeight()">
+            <p id="prweightErr"></p> 
+            Product Type:</br>
+            <select id="producttypeselect"  name="producttypeselect" onchange="checkProductTypeSel()">
+            <option value="">Select Product Type</option>
+            </select>
+            <p id="PrTypeErr"></p>
+            Exported To:</br>
+            <select id="exportedto"  name="exportedto" onchange="checkProductExportedTo()">
+            <option value="">Select Product Exported To</option>
+            </select>
+            <p id="ExpToErr"></p>
+            Destination Terminal(Within the Chittaging):
+            <select id="terminalNameSelect"  name="terminalName" onchange="checkTerminalName()">
+            <option value="">Select Terminal Name</option>
+            </select>
+            <p id="TNameErr"></p>
+            Product Price: <input type="number" id="prdctprice" name="prdctprice" placeholder="Price $" onblur="checkPrPrice()">
+            <p id="PrPriceErr"></p>
+            Product Pickup Place: <input type="text" id="prpickupplace" name="prpickupplace" placeholder="Product PickUp Place" onblur="checkPickPlace()">
+            <p id="PrPickupErr"></p>
+            Rent : <input type="number" id="rent" name="rent" placeholder="Rent Ammount" onblur="checkRent()">
+            <p id="RentErr"></p>
+<input type="submit" name="submit" value="Register"></br>  
+</form>  </center>
+</body>
+</html>

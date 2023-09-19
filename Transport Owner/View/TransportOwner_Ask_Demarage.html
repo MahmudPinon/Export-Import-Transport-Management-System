@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script>  
+			window.onload = function() {
+        document.body.style.backgroundImage = "url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBw0NDQ0HBw0HBwcNBw0HBwcHBw8IDQcNFREWFhURExMYHSggGBolGxMVITEhJSkrLi4uFx8zODMsNygtLisBCgoKDQ0NDw8PDysZFRkrKzctLSsrLS0rNzcrKy03LTc3KzctNzc3LTc3LTctLS03LSsrLTctLS03LS0tLTctLf/AABEIALYBFQMBIgACEQEDEQH/xAAWAAEBAQAAAAAAAAAAAAAAAAAAAQb/xAAVEAEBAAAAAAAAAAAAAAAAAAAAAf/EABcBAQEBAQAAAAAAAAAAAAAAAAABBQT/xAAVEQEBAAAAAAAAAAAAAAAAAAAAAf/aAAwDAQACEQMRAD8A2ADuYwAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAoAAAAAAAAAAAAAIACgAAAAAAAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAKICgAgAAAACggAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACoAAAAgAAAKAAAAAAAAAAAAAAAAAAAAAAAACoIKgKAKCAAAAAACoAAAAgAKAAAAAAAAgAKAAAAAAAIACgqAAACoAAAACAAoCoIAoAAAAAAAAAAAAAAAIAAAqKCoAAAAAACAAoAAqAAAAAAAAAAAAAAAACAAoAAACAqCgAgAKACAAAAAAAAAAoAAAAAAAAAAAAAAAIAAAAABAAAAQLQUoAgAAACgAoAAAAAgAKAAgAIAAAKj/9k=')";
+    }
+		function validateform(){  
+           
+                  var prcode=document.getElementById("prcode").value;
+                  var regnum=document.getElementById("regnum").value;
+                  var pdte=document.getElementById("pdte").value;
+                  var apclrdte = document.getElementById("apclrdte").value;
+                  var chkclrdte=document.getElementById("chkclrdte").value;
+                  
+                  var pdteDateObj = new Date(pdte);
+                  var apclrdteDateObj = new Date(apclrdte);
+                  var chkclrdteDateObj = new Date(chkclrdte);
+                  var today = new Date();
+
+
+                  if (prcode.trim() == "") {
+                  alert("Please enter the Product Code");
+                  return false;
+                  }
+                  if (regnum==null || regnum==""){  
+		            alert("Please enter the Registration Number");  
+		            return false;  
+		          }
+                if (pdte==null || pdte==""){  
+		           alert("Enter the Product PickUp date");  
+		           return false;  
+		          }
+                if (apclrdte==null || apclrdte==""){  
+		           alert("Enter the Product Actual Clearence date");  
+		           return false;  
+		          }
+                if (chkclrdte==null || chkclrdte==""){  
+		           alert("Enter the Product Clearence date");  
+		           return false;  
+		          }
+                if (apclrdte != '' && chkclrdte != '') {
+                       if (apclrdteDateObj.getTime()>chkclrdteDateObj.getTime()) {
+                       alert("You Have Provided the Wrong Information1");
+                      return false;
+                      }
+                  }
+                if (apclrdte != '' && chkclrdte != '') {
+                    var diffInMs = Math.abs(apclrdteDateObj - chkclrdteDateObj);
+                    var diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+                       if (diffInDays>10) {
+                       alert("You Have Provided the Wrong Information");
+                      return false;
+                      }
+                  } 
+                if(apclrdte != '' && chkclrdte != ''&&pdte != '' && regnum != ''&& prcode!='')
+                {
+                        res=helpvalidateform(regnum,prcode,apclrdte,pdte);
+                        if(res==false)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                }
+
+
+}
+function helpvalidateform(regnum,prcode,chkclrdte,pdte)
+{
+    var xhttp = new XMLHttpRequest();
+    var result = false;
+               
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            
+            if(this.responseText != "exists"){
+                alert("You Have Provide the Wrong Information Please Provide the Right Information."); 
+            }
+            else {
+                result = true;
+            }
+        }
+    };
+    xhttp.open("POST", "../Controller/CheckDemarage.php", false);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("regnum=" +regnum+"&prcode=" + prcode+"&chkclrdte=" + chkclrdte+"&pdte=" + pdte);
+    return result;
+}
+function checkPrCode() {
+			if (document.getElementById("prcode").value == "") {
+			  	document.getElementById("prcodeErr").innerHTML = "Product Code can't be blank";
+			  	document.getElementById("prcode").style.borderColor = "red";
+			}else{
+			  	document.getElementById("prcodeErr").innerHTML = "";
+			  	document.getElementById("prcode").style.borderColor = "black";
+
+			}
+			
+        }
+
+function checkregnum(){
+           if (document.getElementById("regnum").value == "") {
+              document.getElementById("regErr").innerHTML = "Transport Registration Number can't be blank";
+              document.getElementById("regnum").style.borderColor = "red";
+           }else{
+              document.getElementById("regErr").innerHTML = "";
+              document.getElementById("regnum").style.borderColor = "black";
+           }
+        }
+
+function checkPickUpDate(){
+        if (document.getElementById("pdte").value == "") {
+            document.getElementById("pdteErr").innerHTML = "Pick Up Date can't be blank";
+            document.getElementById("pdte").style.borderColor = "red";
+        }else{
+              document.getElementById("pdteErr").innerHTML = "";
+              document.getElementById("pdte").style.borderColor = "black";
+        }
+        }
+function checkAClrDate(){
+        if (document.getElementById("apclrdte").value == "") {
+            document.getElementById("apclrdteErr").innerHTML = "Actual Clearence Date Can not be Blank";
+            document.getElementById("apclrdte").style.borderColor = "red";
+        }else{
+            document.getElementById("apclrdteErr").innerHTML = "";
+            document.getElementById("apclrdte").style.borderColor = "black";
+        }
+        }
+function checkClrDate(){
+        if (document.getElementById("chkclrdte").value == "") {
+            document.getElementById("chkclrdteErr").innerHTML = "Clearence Date Can not be Blank";
+            document.getElementById("chkclrdte").style.borderColor = "red";
+        }else{
+            document.getElementById("chkclrdteErr").innerHTML = "";
+            document.getElementById("chkclrdte").style.borderColor = "black";
+        }
+        }   
+	
+</script>  
+</head>
+<title>Registration form</title> 
+<link rel="stylesheet" href="../Style/TrnasportOwnerReg.css">
+</head>
+<body>
+<br />
+<div>  
+	<fieldset >
+	  <legend><b>Ask Demarage</legend>                
+	  <center><form  method="post" action="../Controller/TransportOwnerDemarage.php" onsubmit="return validateform()" > 
+            Product Code: <input type="text" name="prcode" id="prcode" placeholder="Enter Product Code" onblur="checkPrCode()" onkeyup="checkPrCode()">
+            <p id="prcodeErr"></p> 
+            Transport Registration Number: <input type="text" id="regnum" name="regnum" placeholder="Enter Transport Registration Number" onblur="checkregnum()">
+            <p id="regErr"></p> 
+            Product Pickup Date:<input type="date" id="pdte" name="pdte" onblur="checkPickUpDate()">
+            <p id="pdteErr"></p> 
+            Product Actual Clearence Date: <input type="date" id="apclrdte" name="apclrdte" onblur="checkAClrDate()">
+            <p id="apclrdteErr"></p>
+            Product Clearence Date: <input type="date" id="chkclrdte" name="chkclrdte" onblur="checkClrDate()">
+            <p id="chkclrdteErr"></p>
+            <input type="submit" name="submit" value="Submit"></br> 
+</form>  </center>
+</body>
+</html>

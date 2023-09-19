@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script>  
+			window.onload = function() {
+        document.body.style.backgroundImage = "url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBw0NDQ0HBw0HBwcNBw0HBwcHBw8IDQcNFREWFhURExMYHSggGBolGxMVITEhJSkrLi4uFx8zODMsNygtLisBCgoKDQ0NDw8PDysZFRkrKzctLSsrLS0rNzcrKy03LTc3KzctNzc3LTc3LTctLS03LSsrLTctLS03LS0tLTctLf/AABEIALYBFQMBIgACEQEDEQH/xAAWAAEBAQAAAAAAAAAAAAAAAAAAAQb/xAAVEAEBAAAAAAAAAAAAAAAAAAAAAf/EABcBAQEBAQAAAAAAAAAAAAAAAAABBQT/xAAVEQEBAAAAAAAAAAAAAAAAAAAAAf/aAAwDAQACEQMRAD8A2ADuYwAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAoAAAAAAAAAAAAAIACgAAAAAAAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAKICgAgAAAACggAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACoAAAAgAAAKAAAAAAAAAAAAAAAAAAAAAAAACoIKgKAKCAAAAAACoAAAAgAKAAAAAAAAgAKAAAAAAAIACgqAAACoAAAACAAoCoIAoAAAAAAAAAAAAAAAIAAAqKCoAAAAAACAAoAAqAAAAAAAAAAAAAAAACAAoAAACAqCgAgAKACAAAAAAAAAAoAAAAAAAAAAAAAAAIAAAAABAAAAQLQUoAgAAACgAoAAAAAgAKAAgAIAAAKj/9k=')";
+    }
+		function validateform(){  
+           
+                  var capacity=document.getElementById("contcapacity").value;
+                  var recruitedpeople = document.getElementById("recruitedpeople").value;
+                  var name=document.getElementById("name").value;
+                  var handlecapacity=document.getElementById("conthandlecapacity").value;
+                  var address=document.getElementById("address").value;
+                 
+                  
+                  if (name.trim() == "") {
+                  alert("Please Enter The Terminal Name");
+                  return false;
+                  }
+                  if (recruitedpeople==null || recruitedpeople==""){  
+		            alert("Recruited People Can not be Empty");  
+		            return false;  
+		          }
+                  if (capacity==null || capacity=="") {
+                  alert("Terminal Total Container Capacity Can not be Empty");
+                  return false;
+                  }
+                  if (handlecapacity == null || handlecapacity == '') {
+                  alert('Terminal Container Handle Capacity Can not be Empty');
+                  return false;
+                  }
+                  if (address.trim() == "") {
+                  alert("Please Enter The Address");
+                  return false;
+                  }
+                  if(name.trim() != "")
+                  {
+                  const regex = /^[a-zA-Z\s]*$/;
+                  if(!regex.test(name.trim()))
+                   {
+                    alert("Invalid Terminal Name");  
+                    return false; 
+                   }
+                  }
+                  if(capacity.trim() != "")
+                  {
+                  if(capacity<3000)
+                   {
+                    alert("Insufficient Capacity to Register Your Terminal");  
+                    return false; 
+                   }
+
+                  }
+                  if(recruitedpeople.trim() != "")
+                  {
+                  if(recruitedpeople<100)
+                   {
+                    alert("Insufficient Number of People Are Recruited");  
+                    return false; 
+                   }
+
+                  }
+                  if(handlecapacity.trim() != "")
+                  {
+                  if(handlecapacity<1500)
+                   {
+                    alert("Insufficient Container Handaling Capacity Per Day to Register Your Terminal");  
+                    return false; 
+                   }
+
+                  }
+                  
+                  
+
+
+    if (name != "" && recruitedpeople != "" && capacity != "" && handlecapacity != ""&& address != "") {
+        var res=helpvalidateform(name,address);
+        if(res==true)
+        {
+            // alert("true");
+            return true;
+        }
+        else if(res==false)
+        {
+            // alert("false");
+            return true;
+        } 
+    }
+
+
+}
+function helpvalidateform(name,address)
+{
+    var xhttp = new XMLHttpRequest();
+    var result = false;
+               
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            // alert(this.responseText);
+            if (this.responseText == "exists") {
+                alert("Terminal Name Already Exists.Please choose another one.");
+            }
+            if (this.responseText == "you have") {
+                alert("You Have Already Registered a Terminal.");
+            }
+            if (this.responseText == "address exists") {
+                alert("A Terminal Already Exists in that Address.");
+            }
+            else {
+                result = false;
+            }
+        }
+    };
+    xhttp.open("POST", "../Controller/CheckDuplicationofTerminalName.php", false);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("name=" + name+"&address=" + address);
+    return result;
+}
+function checkTerName() {
+			if (document.getElementById("name").value == "") {
+			  	document.getElementById("nameErr").innerHTML = "Terminal Name can not be Blank";
+			  	document.getElementById("name").style.borderColor = "red";
+			}else{
+			  	document.getElementById("nameErr").innerHTML = "";
+			  	document.getElementById("name").style.borderColor = "black";
+
+			}
+			
+        }
+
+function checkcapacity(){
+           if (document.getElementById("contcapacity").value == "") {
+              document.getElementById("contcapacityErr").innerHTML = "Terminal Container Cpacity Can not be Blank";
+              document.getElementById("contcapacity").style.borderColor = "red";
+           }else{
+              document.getElementById("contcapacityErr").innerHTML = "";
+              document.getElementById("contcapacity").style.borderColor = "black";
+           }
+        }
+	function checkrecpeople(){
+        if (document.getElementById("recruitedpeople").value == "") {
+            document.getElementById("recruitedpeopleErr").innerHTML = "Number of Recruited People in the Terminal Can not be Blank";
+            document.getElementById("recruitedpeople").style.borderColor = "red";
+        }else{
+            document.getElementById("recruitedpeopleErr").innerHTML = "";
+            document.getElementById("recruitedpeople").style.borderColor = "black";
+        }
+        } 
+        function checkconthandlecapacity(){
+        if (document.getElementById("conthandlecapacity").value == "") {
+            document.getElementById("conthandlecapacityErr").innerHTML = "Terminal Container Handling Capacity Can not Blank";
+            document.getElementById("conthandlecapacity").style.borderColor = "red";
+        }else{
+              document.getElementById("conthandlecapacityErr").innerHTML = "";
+              document.getElementById("conthandlecapacity").style.borderColor = "black";
+        }
+        } 
+        function checkAddress() {
+			if (document.getElementById("address").value == "") {
+			  	document.getElementById("addressErr").innerHTML = "Terminal Name can not be Blank";
+			  	document.getElementById("address").style.borderColor = "red";
+			}else{
+			  	document.getElementById("addressErr").innerHTML = "";
+			  	document.getElementById("address").style.borderColor = "black";
+
+			}
+			
+        } 
+	
+</script>  
+</head>
+<title>Registration form</title> 
+<link rel="stylesheet" href="../Style/TerminalReg.css">
+</head>
+<body>
+<br />
+<div>  
+	<fieldset >
+	  <legend><b>Registration</legend>                
+	  <center><form  method="post" action="../Controller/CreateRegisteredTerminal.php" onsubmit="return validateform()" > 
+            Name: <input type="text" name="name" id="name" placeholder="Enter Terminal Name" onblur="checkTerName()" onkeyup="checkTerName()">
+            <p id="nameErr"></p> 
+            Container Capacity: <input type="number" id="contcapacity" name="contcapacity" placeholder="Enter Terminal Container Capacity" onblur="checkcapacity()">
+            <p id="contcapacityErr"></p> 
+            Number of Recruited People: <input type="number" id="recruitedpeople" name="recruitedpeople" placeholder="Enter Number of Recruited People" onblur="checkrecpeople()">
+            <p id="recruitedpeopleErr"></p>
+            Container Handle Capacity: <input type="number" id="conthandlecapacity" name="conthandlecapacity" placeholder="Enter the container handling capacity(twenty-foot equivalent unit)" onblur="checkconthandlecapacity()">
+            <p id="conthandlecapacityErr"></p>
+            Address: <input type="text" name="address" id="address" placeholder="Enter The Address" onblur="checkAddress()" onkeyup="checkAddress()">
+            <p id="addressErr"></p> 
+<input type="submit" name="submit" value="Register"></br>  
+</form>  </center>
+</body>
+</html>

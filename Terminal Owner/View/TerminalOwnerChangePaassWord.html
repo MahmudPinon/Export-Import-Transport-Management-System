@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script>  
+			window.onload = function() {
+        document.body.style.backgroundImage = "url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBw0NDQ0HBw0HBwcNBw0HBwcHBw8IDQcNFREWFhURExMYHSggGBolGxMVITEhJSkrLi4uFx8zODMsNygtLisBCgoKDQ0NDw8PDysZFRkrKzctLSsrLS0rNzcrKy03LTc3KzctNzc3LTc3LTctLS03LSsrLTctLS03LS0tLTctLf/AABEIALYBFQMBIgACEQEDEQH/xAAWAAEBAQAAAAAAAAAAAAAAAAAAAQb/xAAVEAEBAAAAAAAAAAAAAAAAAAAAAf/EABcBAQEBAQAAAAAAAAAAAAAAAAABBQT/xAAVEQEBAAAAAAAAAAAAAAAAAAAAAf/aAAwDAQACEQMRAD8A2ADuYwAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAoAAAAAAAAAAAAAIACgAAAAAAAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAKICgAgAAAACggAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACoAAAAgAAAKAAAAAAAAAAAAAAAAAAAAAAAACoIKgKAKCAAAAAACoAAAAgAKAAAAAAAAgAKAAAAAAAIACgqAAACoAAAACAAoCoIAoAAAAAAAAAAAAAAAIAAAqKCoAAAAAACAAoAAqAAAAAAAAAAAAAAAACAAoAAACAqCgAgAKACAAAAAAAAAAoAAAAAAAAAAAAAAAIAAAAABAAAAQLQUoAgAAACgAoAAAAAgAKAAgAIAAAKj/9k=')";
+    }
+		function validateform(){  
+           
+                  var password=document.getElementById("password").value;  
+		          var currpassword=document.getElementById("conpassword").value;
+               if (password == null || password == '') {
+                 alert('password is empty');
+                 return false;
+                }
+                if (currpassword == null || currpassword == '') {
+                 alert('Confirm Password is empty');
+                 return false;
+                }
+              if(password.length<8)
+		       {  
+		        alert("Password must be at least 8 characters long.");  
+		        return false;  
+		       } 
+             if(password.length>=8)
+              {
+                const pattern = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]){8,}\S+$/;
+                if(!pattern.test(password))
+                 {
+                   alert("Weak and Invalid Password");  
+                   return false; 
+                 }
+              }
+          if(currpassword.length<8)
+            {
+               alert("Confirm Password and Password didn't match");  
+               return false; 
+            }
+          if(currpassword.length>=8 && password.length>=8)
+            {
+            if(currpassword !=password)
+            {
+               alert("Confirm Password and Password didn't match");  
+               return false; 
+            }       
+           }      
+}
+
+        function checkCpass(){
+        if (document.getElementById("conpassword").value == "") {
+            document.getElementById("CpassErr").innerHTML = "Password and Confirm Password can't be blank";
+            document.getElementById("conpassword").style.borderColor = "red";
+        }else{
+            document.getElementById("CpassErr").innerHTML = "";
+            document.getElementById("conpassword").style.borderColor = "black";
+        }
+        }
+        function checkPass(){
+           if (document.getElementById("password").value == "") {
+		   document.getElementById("passErr").innerHTML = "Password can't be blank";
+		   document.getElementById("password").style.borderColor = "red";
+	     }else{
+		   document.getElementById("passErr").innerHTML = "";
+		   document.getElementById("password").style.borderColor = "black";
+			}
+        }    
+	
+</script>  
+</head>
+<title>Change Password</title> 
+<link rel="stylesheet" href="../../Transport Owner/Style/TrnasportOwnerReg.css">
+</head>
+<body>
+<br />
+<div>  
+	<fieldset >
+	  <legend><b>Registration</legend>                
+	  <center><form  method="post" action="../Controller/TerminalOwnerChangePassword.php" onsubmit="return validateform()" > 
+            New Password: <input type="password" id="password" name="password" placeholder="Enter New Password" onblur="checkPass()">
+            <p id="passErr"></p>
+            Confirm New Password: <input type="password" id="conpassword" name="conpassword" placeholder="Confirm New Password" onblur="checkCpass()">
+            <p id="CpassErr"></p>
+<input type="submit" name="submit" value="Change"></br>  
+</form>  </center>
+</body>
+</html>

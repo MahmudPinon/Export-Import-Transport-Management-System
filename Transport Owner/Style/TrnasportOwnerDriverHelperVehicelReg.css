@@ -1,0 +1,50 @@
+fieldset {
+    border: 1px solid rgb(255, 232, 57);
+    width: 400px;
+    margin: auto;
+}
+
+label {
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="file"] {
+    width: 100%;
+    padding: 1px;
+    margin-bottom: 7px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+
+input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+#TregnumErr,
+#DnameErr,
+#HnameErr,
+#DLicenseErr,
+#DAgeErr,
+#HAgeErr,
+#DPhoneNumberErr,
+#TNameErr,
+#DDpErr {
+    color: red;
+}
+legend {
+text-align: center;
+}

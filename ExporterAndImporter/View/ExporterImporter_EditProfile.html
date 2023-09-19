@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script>  
+			window.onload = function() {
+        document.body.style.backgroundImage = "url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBw0NDQ0HBw0HBwcNBw0HBwcHBw8IDQcNFREWFhURExMYHSggGBolGxMVITEhJSkrLi4uFx8zODMsNygtLisBCgoKDQ0NDw8PDysZFRkrKzctLSsrLS0rNzcrKy03LTc3KzctNzc3LTc3LTctLS03LSsrLTctLS03LS0tLTctLf/AABEIALYBFQMBIgACEQEDEQH/xAAWAAEBAQAAAAAAAAAAAAAAAAAAAQb/xAAVEAEBAAAAAAAAAAAAAAAAAAAAAf/EABcBAQEBAQAAAAAAAAAAAAAAAAABBQT/xAAVEQEBAAAAAAAAAAAAAAAAAAAAAf/aAAwDAQACEQMRAD8A2ADuYwAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAoAAAAAAAAAAAAAIACgAAAAAAAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAKICgAgAAAACggAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACoAAAAgAAAKAAAAAAAAAAAAAAAAAAAAAAAACoIKgKAKCAAAAAACoAAAAgAKAAAAAAAAgAKAAAAAAAIACgqAAACoAAAACAAoCoIAoAAAAAAAAAAAAAAAIAAAqKCoAAAAAACAAoAAqAAAAAAAAAAAAAAAACAAoAAACAqCgAgAKACAAAAAAAAAAoAAAAAAAAAAAAAAAIAAAAABAAAAQLQUoAgAAACgAoAAAAAgAKAAgAIAAAKj/9k=')";
+    }
+		function validateform(){  
+           
+                  var name=document.getElementById("name").value;
+                  var email=document.getElementById("email").value;
+                  var phonenumber=document.getElementById("phnnumber").value;
+                  var dob = document.getElementById("dob").value;
+                  var address=document.getElementById("address").value;
+                  if (name.trim() == "") {
+                  alert("Please enter a Name");
+                  return false;
+                  }
+                  if (email==null || email==""){  
+		            alert("Email can't be blank");  
+		            return false;  
+		          }
+                if (phonenumber==null || phonenumber==""){  
+		           alert("PhoneNumber can't be blank");  
+		           return false;  
+		          }
+                 if(name.trim() != "")
+                 {
+                  const regex = /^[a-zA-Z\s]*$/;
+                  if(!regex.test(name.trim()))
+                   {
+                 alert("Invalid name");  
+                 return false; 
+                   }
+                 }
+                if (dob == null || dob == '') {
+                 alert('Date is empty');
+                 return false;
+                }
+                if(address == null || address == '')
+                {
+                    alert("Address is empty");  
+		            return false;
+                }     
+        if (dob != null || dob != '')
+         {
+           const dateFormat = /^(\d{4})-(\d{2})-(\d{2})$/;
+           if (!dob.match(dateFormat)) {
+           return false;
+         }
+  
+       const year = parseInt(RegExp.$1);
+       const month = parseInt(RegExp.$2);
+       const day = parseInt(RegExp.$3);
+       const dobDate = new Date(year, month - 1, day);
+       const ageInMs = Date.now() - dobDate.getTime();
+       const ageInYears = ageInMs / (1000 * 60 * 60 * 24 * 365.25);  
+       if (ageInYears < 21 || ageInYears > 75) {
+         alert("Invalid Age"); 
+         return false;
+        }
+        }
+	      if(email.length>0)
+            {
+                 
+             const pattern= /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+             if(!pattern.test(email))
+              {
+                 alert("Invalid email address");  
+                 return false;
+              }
+            }
+            if(phonenumber.length===11)
+           {
+            
+                  var phoneregex = /^(?:\+?88)?01[15-9]\d{8}$/;
+			if (!phoneregex.test(phonenumber)) {
+				alert("Please enter a valid phone number.");
+				return false;
+			}
+               
+            }
+
+    
+    if (name != "" && phonenumber != "" && email != "" && dob != ""&& address != "") {
+        var res=helpvalidateform(email,phonenumber);
+        if(res==true)
+        {
+            //alert("true");
+            return true;
+        }
+        else if(res==false)
+        {
+            //alert("false");
+            return false;
+        } 
+    }
+ 
+
+
+}
+function helpvalidateform(email,phonenumber)
+{
+    var xhttp = new XMLHttpRequest();
+    var result = false;
+               
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            if(this.responseText == "email exists"){
+                alert("Email already exists. Please choose another one."); 
+            }
+            else if(this.responseText == "phone exists"){
+                alert("Phone Number already exists. Please choose another one."); 
+            }
+            else {
+                result = true;
+            }
+        }
+    };
+    xhttp.open("POST", "../Controller/CheckDuplicationEditExporterImporter.php", false);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("email=" + email+"&phonenumber=" + phonenumber);
+    return result;
+}
+function checkName() {
+			if (document.getElementById("name").value == "") {
+			  	document.getElementById("nameErr").innerHTML = "Name can't be blank";
+			  	document.getElementById("name").style.borderColor = "red";
+			}else{
+			  	document.getElementById("nameErr").innerHTML = "";
+			  	document.getElementById("name").style.borderColor = "black";
+
+			}
+			
+        }
+
+function checkEmail(){
+           if (document.getElementById("email").value == "") {
+              document.getElementById("EmailErr").innerHTML = "Email can't be blank";
+              document.getElementById("email").style.borderColor = "red";
+           }else{
+              document.getElementById("EmailErr").innerHTML = "";
+              document.getElementById("email").style.borderColor = "black";
+           }
+        }
+
+        function checkDob(){
+        if (document.getElementById("dob").value == "") {
+            document.getElementById("DobErr").innerHTML = "Date of Birth can't be blank";
+            document.getElementById("dob").style.borderColor = "red";
+        }else{
+              document.getElementById("DobErr").innerHTML = "";
+              document.getElementById("dob").style.borderColor = "black";
+        }
+        }
+        function checkPhoneNumber(){
+        if (document.getElementById("phnnumber").value == "") {
+            document.getElementById("PhoneNumberErr").innerHTML = "Phone Number can't be blank";
+            document.getElementById("phnnumber").style.borderColor = "red";
+        }else{
+            document.getElementById("PhoneNumberErr").innerHTML = "";
+            document.getElementById("phnnumber").style.borderColor = "black";
+        }
+        }
+   
+	
+</script>  
+</head>
+<title>Registration form</title> 
+<link rel="stylesheet" href="../../Transport Owner/Style/TrnasportOwnerReg.css">
+</head>
+<body>
+<br />
+<div>  
+	<fieldset >
+	  <legend><b>Edit</legend>                
+	  <center><form  method="post" action="../Controller/ExporterImporterEditProfileController.php" onsubmit="return validateform()" > 
+            Name: <input type="text" name="name" id="name" placeholder="Enter Name" onblur="checkName()" onkeyup="checkName()">
+            <p id="nameErr"></p> 
+            Email: <input type="text" id="email" name="email" placeholder="Enter Email" onblur="checkEmail()">
+            <p id="EmailErr"></p> 
+            Phone Number: <input type="number" id="phnnumber" name="phnnumber" placeholder="Enter Phone Number" onblur="checkPhoneNumber()">
+            <p id="PhoneNumberErr"></p> 
+            Date of Birth: <input type="date" id="dob" name="dob" onblur="checkDob()">
+            <p id="DobErr"></p>
+          Address: <input type="text" id="address" name="address" placeholder="Enter Address" onblur="checkAddress()">
+            <p id="AddressErr"></p>
+<input type="submit" name="submit" value="Change"></br> 
+</form>  </center>
+</body>
+</html>

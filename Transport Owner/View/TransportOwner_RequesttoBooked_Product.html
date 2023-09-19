@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script>  
+			window.onload = function() {
+        document.body.style.backgroundImage = "url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBw0NDQ0HBw0HBwcNBw0HBwcHBw8IDQcNFREWFhURExMYHSggGBolGxMVITEhJSkrLi4uFx8zODMsNygtLisBCgoKDQ0NDw8PDysZFRkrKzctLSsrLS0rNzcrKy03LTc3KzctNzc3LTc3LTctLS03LSsrLTctLS03LS0tLTctLf/AABEIALYBFQMBIgACEQEDEQH/xAAWAAEBAQAAAAAAAAAAAAAAAAAAAQb/xAAVEAEBAAAAAAAAAAAAAAAAAAAAAf/EABcBAQEBAQAAAAAAAAAAAAAAAAABBQT/xAAVEQEBAAAAAAAAAAAAAAAAAAAAAf/aAAwDAQACEQMRAD8A2ADuYwAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAoAAAAAAAAAAAAAIACgAAAAAAAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAKICgAgAAAACggAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACoAAAAgAAAKAAAAAAAAAAAAAAAAAAAAAAAACoIKgKAKCAAAAAACoAAAAgAKAAAAAAAAgAKAAAAAAAIACgqAAACoAAAACAAoCoIAoAAAAAAAAAAAAAAAIAAAqKCoAAAAAACAAoAAqAAAAAAAAAAAAAAAACAAoAAACAqCgAgAKACAAAAAAAAAAoAAAAAAAAAAAAAAAIAAAAABAAAAQLQUoAgAAACgAoAAAAAgAKAAgAIAAAKj/9k=')";
+    }
+		function validateform(){  
+           
+                  var productid=document.getElementById("productid").value;
+                  var regnum=document.getElementById("regnum").value;
+                  
+                  if (productid.trim() == "") {
+                  alert("Please Enter The Product Code");
+                  return false;
+                  }
+                  if (regnum.trim() == "") {
+                  alert("Please Enter The Vehicle Registration Number");
+                  return false;
+                  }
+                 
+    if (productid != "" && regnum!="") {
+        var res=helpvalidateform1(productid,regnum);
+
+        if(res==true)
+        {
+            return true;
+        }
+        else if(res==false)
+        {
+            return false;
+        } 
+    }
+ 
+
+}
+function helpvalidateform1(productid,regnum) {
+  var xhttp = new XMLHttpRequest();
+  var result = false;
+               
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      if (this.responseText == "product not exists") {
+        alert("This Product is not Exists in the Registerd Product");      
+        result = false;
+      } else if (this.responseText == "product booked") {
+        alert("This Product is Booked."); 
+        result = false;
+      }
+      else if (this.responseText == "not registered") {
+        alert("The Entered Vehicle Registration Number Vehicle is not a Registered Vehicle."); 
+        result = false;
+      }     
+      else if (this.responseText == "not belongs to you") {
+        alert("The Entered Vehicle Registration Number Vehicle doesn't Belongs to You"); 
+        result = false;
+      }
+      else if (this.responseText == "vehicle booked") {
+        alert("Your Registered Vehicle is Already Booked."); 
+        result = false;
+      }
+      else if (this.responseText == "already requested") {
+        alert("You Have Already Requested for the Product."); 
+        result = false;
+      } else {
+        result = true;
+      }
+    }
+  };
+  xhttp.open("POST", "../Controller/CheckExistenceProductId.php", false);
+  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhttp.send("productid=" + productid+"&regnum=" +regnum);
+  return result;
+}
+
+function checkprid() {
+			if (document.getElementById("productid").value == "") {
+			  	document.getElementById("pridErr").innerHTML = "Corporation Name can't be blank";
+			  	document.getElementById("productid").style.borderColor = "red";
+			}else{
+			  	document.getElementById("pridErr").innerHTML = "";
+			  	document.getElementById("productid").style.borderColor = "black";
+
+			}
+			
+        }
+function checkreg()
+{
+             if (document.getElementById("regnum").value == "") {
+			  	document.getElementById("regErr").innerHTML = "Vehicle Registration Number Can't be Blank";
+			  	document.getElementById("regnum").style.borderColor = "red";
+			}else{
+			  	document.getElementById("regErr").innerHTML = "";
+			  	document.getElementById("regnum").style.borderColor = "black";
+
+			}
+}        
+
+</script>  
+</head>
+<title>Request Form</title> 
+<link rel="stylesheet" href="../../Transport Owner/Style/TrnasportOwnerRequestExportImporter.css">
+</head>
+<body>
+<br />
+<div>  
+	<fieldset >
+	  <legend><b>Request Form</legend>    
+        
+	<span style=" display: flex; align-items: center; justify-content: center; height: 20vh; color: rgb(198, 104, 16); font-size: 16px;">Once You Request For the Product You Can not Cancel It. Only Exporter/Importer Deserve the Right to Accept/Reject the Trip</span>           
+	  <center><form  method="post" action="../Controller/RequesttoExporterImportertoBookProduct.php" onsubmit="return validateform()" > 
+            Product Id: <input type="text" name="productid" id="productid" placeholder="Enter Product Id" onblur="checkprid()" onkeyup="checkprid()">
+            <p id="pridErr"></p> 
+            Transport Registration Number: <input type="text" name="regnum" id="regnum" placeholder="Enter Transport Registration Number" onblur="checkreg()" onkeyup="checkreg()">
+            <p id="regErr"></p>
+<input type="submit" name="submit" value="Request"></br> 
+</form>  </center>
+</body>
+</html>

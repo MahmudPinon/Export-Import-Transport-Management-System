@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script>  
+			window.onload = function() {
+        document.body.style.backgroundImage = "url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBw0NDQ0HBw0HBwcNBw0HBwcHBw8IDQcNFREWFhURExMYHSggGBolGxMVITEhJSkrLi4uFx8zODMsNygtLisBCgoKDQ0NDw8PDysZFRkrKzctLSsrLS0rNzcrKy03LTc3KzctNzc3LTc3LTctLS03LSsrLTctLS03LS0tLTctLf/AABEIALYBFQMBIgACEQEDEQH/xAAWAAEBAQAAAAAAAAAAAAAAAAAAAQb/xAAVEAEBAAAAAAAAAAAAAAAAAAAAAf/EABcBAQEBAQAAAAAAAAAAAAAAAAABBQT/xAAVEQEBAAAAAAAAAAAAAAAAAAAAAf/aAAwDAQACEQMRAD8A2ADuYwAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAoAAAAAAAAAAAAAIACgAAAAAAAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAKICgAgAAAACggAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACoAAAAgAAAKAAAAAAAAAAAAAAAAAAAAAAAACoIKgKAKCAAAAAACoAAAAgAKAAAAAAAAgAKAAAAAAAIACgqAAACoAAAACAAoCoIAoAAAAAAAAAAAAAAAIAAAqKCoAAAAAACAAoAAqAAAAAAAAAAAAAAAACAAoAAACAqCgAgAKACAAAAAAAAAAoAAAAAAAAAAAAAAAIAAAAABAAAAQLQUoAgAAACgAoAAAAAgAKAAgAIAAAKj/9k=')";
+        populateTerminalNameSelect();
+        
+    }
+		function validateform(){  
+
+                  var select1 = document.getElementById("terminalNameSelect");
+                  var selectedOption1 = select1.options[select1.selectedIndex].value;
+
+                 
+
+}
+
+function populateTerminalNameSelect() {
+  var select = document.getElementById("terminalNameSelect");
+  var xhr = new XMLHttpRequest();
+  var result = true;
+  xhr.open("GET", "../Controller/ExporterImporterTerminalSelectController.php");
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      var options = JSON.parse(xhr.responseText);
+      if (options.length === 0) {
+        var option = document.createElement("option");
+        option.text = "No terminals available";
+        select.add(option);
+        result = false;
+      } else {
+        for (var i = 0; i < options.length; i++) {
+          var option = document.createElement("option");
+          option.text = options[i].TerminalName;
+          select.add(option);
+        }
+      }
+    } else {
+      console.log("Error: " + xhr.statusText);
+    }
+  };
+  xhr.send();
+  return result;
+}
+        function checkTerminalName(){
+           var select = document.getElementById("terminalName");
+           var error = document.getElementById("TNameErr");
+           if (select.value === "") {
+           error.innerHTML = "Please select a terminal name.";
+           select.style.borderColor = "red";
+           return false;
+           }
+           error.innerHTML = "";
+           select.style.borderColor = "black";
+           return true;
+        }
+        
+</script>  
+</head>
+<title>Report Terminal</title> 
+<link rel="stylesheet" href="../../Transport Owner/Style/Report.css">
+
+</head>
+<body>
+<br />
+<div>  
+	<fieldset >
+	  <legend><b>Report Terminal</legend>                
+	  <center><form  method="post" action="../../Transport Owner/Controller/CreateReportonTerminalOwner.php" onsubmit="return validateform()" > 
+            Select The Terminal:
+            <select id="terminalNameSelect"  name="terminalName" onchange="checkTerminalName()">
+            <option value="">Select Terminal Name</option>
+            </select>
+            <p id="TNameErr"></p>
+            
+<input type="submit" name="submit" value="Report"></br>  
+</form>  </center>
+</body>
+</html>

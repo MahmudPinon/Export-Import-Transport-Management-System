@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script>  
+			window.onload = function() {
+        document.body.style.backgroundImage = "url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBw0NDQ0HBw0HBwcNBw0HBwcHBw8IDQcNFREWFhURExMYHSggGBolGxMVITEhJSkrLi4uFx8zODMsNygtLisBCgoKDQ0NDw8PDysZFRkrKzctLSsrLS0rNzcrKy03LTc3KzctNzc3LTc3LTctLS03LSsrLTctLS03LS0tLTctLf/AABEIALYBFQMBIgACEQEDEQH/xAAWAAEBAQAAAAAAAAAAAAAAAAAAAQb/xAAVEAEBAAAAAAAAAAAAAAAAAAAAAf/EABcBAQEBAQAAAAAAAAAAAAAAAAABBQT/xAAVEQEBAAAAAAAAAAAAAAAAAAAAAf/aAAwDAQACEQMRAD8A2ADuYwAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAoAAAAAAAAAAAAAIACgAAAAAAAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAKICgAgAAAACggAAAAAAAAAgAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACoAAAAgAAAKAAAAAAAAAAAAAAAAAAAAAAAACoIKgKAKCAAAAAACoAAAAgAKAAAAAAAAgAKAAAAAAAIACgqAAACoAAAACAAoCoIAoAAAAAAAAAAAAAAAIAAAqKCoAAAAAACAAoAAqAAAAAAAAAAAAAAAACAAoAAACAqCgAgAKACAAAAAAAAAAoAAAAAAAAAAAAAAAIAAAAABAAAAQLQUoAgAAACgAoAAAAAgAKAAgAIAAAKj/9k=')";
+        
+    }
+		function validateform(){  
+           
+                  var transportregnumber=document.getElementById("transportregnumber").value;
+                  var radios = document.getElementsByName("status");
+                  var checked = false;
+                  
+		         for (var i = 0; i < radios.length; i++) 
+				 {
+                 if (radios[i].checked)
+				    {
+                    checked = true;
+                    break;
+                    }
+                }
+
+                if(!checked)
+                {
+                    alert("Please Select a Status from the Options.");  
+		            return false;
+                }
+                if(transportregnumber == "")
+                {
+                    alert("Please Enter The TransPort Registration Number.");  
+		            return false;
+                }
+                if (transportregnumber != "" && checked) {
+                var res=helpvalidateform(transportregnumber);
+                   if(res==true)
+                   {
+                    return true;
+                   }
+                    else if(res==false)
+                   {
+                      //alert("false");
+                      return false;
+                   } 
+                }
+
+
+}
+function helpvalidateform(transportregnumber)
+{
+ 
+    var xhttp = new XMLHttpRequest();
+    var result = false;
+               
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            //alert(this.responseText);
+            if (this.responseText == "transportregnumber not exists") {
+                alert("This Vehicle is not Registered in the System.");
+            }
+            else if(this.responseText == "ownername and regnnumber not match"){
+                alert("This Vehicle is not belongs to your Ownership.");
+            }
+            else {
+                result = true;
+            }
+        }
+    };
+    xhttp.open("POST", "../Controller/CheckControllerforStatus.php", false);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("transportregnumber=" + transportregnumber);
+    return result;
+}
+
+
+
+
+
+
+
+function checkRegNum() {
+			if (document.getElementById("transportregnumber").value == "") {
+			  	document.getElementById("TregnumErr").innerHTML = "Transport Registration Number Can not be Blank";
+			  	document.getElementById("transportregnumber").style.borderColor = "red";
+			}else{
+			  	document.getElementById("TregnumErr").innerHTML = "";
+			  	document.getElementById("transportregnumber").style.borderColor = "black";
+
+			}
+			
+        }
+        
+        
+
+</script>  
+</head>
+<title>Registration form</title> 
+<link rel="stylesheet" href="../Style/TrnasportOwnerDriverHelperVehicelReg.css">
+</head>
+<body>
+<br />
+<div>  
+	<fieldset >
+	  <legend><b>Update Status</legend>                
+	  <center><form  method="post" action="../Controller/RegisteredVehileChangeStatus.php" onsubmit="return validateform()" > 
+            Transport Registration Number: <input type="text" name="transportregnumber" id="transportregnumber" placeholder="Enter Registration Number" onblur="checkRegNum()" onkeyup="checkRegNum()">
+            <p id="TregnumErr"></p> 
+            <fieldset>
+                <legend>Status(Yes[Booked]No[UnBooked])</legend>
+                <label><input type="radio" id="status" name="status" value="Yes">Yes</label>
+                <label><input type="radio" id="status" name="status" value="No">No</label></br>
+          </fieldset>
+            
+<input type="submit" name="submit" value="Change"></br>
+      </br>
+    <div style="text-align:center;">
+        <a href="../View/TranspoertWonerWorkstart.php" style="display:inline-block; padding:10px 20px; border:1px solid blue; color:wheat; text-decoration:none; border-radius: 10px;background-color:lightseagreen;">Home</a>
+    </div>
+    
+        
+</form>  </center>
+</body>
+</html>
